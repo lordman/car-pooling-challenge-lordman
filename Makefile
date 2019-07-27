@@ -3,8 +3,19 @@
 # Copyright Cabify.com
 # Licence MIT
 
+# Basic go commands
+GOCMD=go
+GOBUILD=$(GOCMD) build
+GOCLEAN=$(GOCMD) clean
+GOTEST=$(GOCMD) test
+GOGET=$(GOCMD) get
+
+# Binary names
+BINARY_NAME=car-pooling-challenge-lordman
+BINARY_UNIX=$(BINARY_NAME)_unix
+
 # Variables
-# UNAME		:= $(shell uname -s)
+UNAME		:= $(shell uname -s)
 
 .EXPORT_ALL_VARIABLES:
 
@@ -23,6 +34,33 @@ endif
 
 # Targets
 #
+.PHONY: all
+all: test build
+
+.PHONY: build
+build:
+	$(GOBUILD) -o $(BINARY_NAME) -v
+
+.PHONY: test
+test:
+	$(GOTEST) -v ./...
+
+.PHONY: clean
+clean:
+	$(GOCLEAN)
+	rm -f $(BINARY_NAME)
+	rm -f $(BINARY_UNIX)
+
+.PHONY: run
+run:
+	$(GOBUILD) -o $(BINARY_NAME) -v ./...
+	./$(BINARY_NAME)
+
+.PHONY: deps
+deps:
+	$(GOGET) gopkg.in/go-playground/validator.v9
+	$(GOGET) github.com/gorilla/mux
+	
 .PHONY: debug
 debug:	### Debug Makefile itself
 	@echo $(UNAME)

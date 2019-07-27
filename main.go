@@ -1,17 +1,22 @@
 package main
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
-	// Package validator implements value validations for structs and individual fields based on tags
 
 	// Package gorilla/mux implements a request router and dispatcher for matching incoming requests to their respective handler
 	"github.com/gorilla/mux"
+	// Package validator implements value validations for structs and individual fields based on tags
+	"gopkg.in/go-playground/validator.v9"
 )
 
 // Car is the model for the cars
 type Car struct {
-	ID    string `json:"id" validate:"required"`
-	Seats int8   `json:"seats" validate:"required,min=4,max=6"`
+	ID int `json:"id" validate:"required"`
+	// Cars have a different amount of seats available,
+	// they can accommodate groups of up to 4, 5 or 6 people
+	Seats int8 `json:"seats" validate:"required,min=4,max=6"`
 }
 
 // Journey is the model for the journeys
@@ -20,18 +25,9 @@ type Journey struct {
 	People int8   `json:"people" validate:"required,min=1,max=6"`
 }
 
-/*
-type Group struct {
-	ID		string	`json:"id"`
-	Seats	int8	`json:"people"`
-}
-*/
-
 // Since we won’t be using a database for now, we are initiating our vars as slices
 var cars []Car
 var journeys []Journey
-
-// var Group []Group
 
 /*
 GET /status
@@ -39,8 +35,8 @@ Indicate the service has started up correctly and is ready to accept requests.
 Responses:
 200 OK When the service is ready to receive requests.
 */
-func getStatus(w http.ResponseWriter, r *http.Request) {
-	//TODO
+func getStatus(w http.ResponseWriter, router *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
 
 /*
@@ -55,8 +51,33 @@ Responses:
 400 Bad Request When there is a failure in the request format, expected
 headers, or the payload can't be unmarshaled.
 */
-func loadAvailableCars(w http.ResponseWriter, r *http.Request) {
-	//TODO
+func loadAvailableCars(w http.ResponseWriter, router *http.Request) {
+	w.Header().Set("Content Type", "application/json")
+	// Remove all previous data (existing journeys and cars)
+	cars = nil
+	journeys = nil
+	// Decode JSON
+	decoded := json.NewDecoder(router.Body).Decode(&cars)
+	// We need to check if the data provided match the requirements
+	validate := validator.New()
+	var valid error
+	for _, cars := range cars {
+		valid = validate.Struct(cars)
+		if valid != nil {
+			break // At least one car has invalid data
+		}
+	}
+
+	if decoded != nil || valid != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		cars = nil
+		log.Println("There is a failure in the request format, expected headers, or the payload can't be unmarshaled")
+
+	} else {
+		w.WriteHeader(http.StatusOK)
+		log.Printf("%+v", cars)
+		log.Println("The list is registered correctly")
+	}
 }
 
 /*
@@ -69,7 +90,7 @@ Responses:
 400 Bad Request When there is a failure in the request format or the
 payload can't be unmarshaled.
 */
-func requestJourney(w http.ResponseWriter, r *http.Request) {
+func requestJourney(w http.ResponseWriter, router *http.Request) {
 	//TODO
 }
 
@@ -84,7 +105,7 @@ Responses:
 400 Bad Request When there is a failure in the request format or the
 payload can't be unmarshaled.
 */
-func dropOff(w http.ResponseWriter, r *http.Request) {
+func dropOff(w http.ResponseWriter, router *http.Request) {
 	//TODO
 }
 
@@ -102,19 +123,21 @@ Responses:
 400 Bad Request When there is a failure in the request format or the
 payload can't be unmarshaled.
 */
-func locateCar(w http.ResponseWriter, r *http.Request) {
+func locateCar(w http.ResponseWriter, router *http.Request) {
 	//TODO
 }
 
 func main() {
 	// Initialize router
-	r := mux.NewRouter()
+	router := mux.NewRouter()
 
 	// Endpoints
-	r.HandleFunc("/status/", getStatus).Methods("GET")
-	r.HandleFunc("/cars/", loadAvailableCars).Methods("PUT")
-	r.HandleFunc("/journey/", requestJourney).Methods("POST")
-	r.HandleFunc("/dropoff/", dropOff).Methods("POST")
-	r.HandleFunc("/locate/", locateCar).Methods("POST")
+	router.HandleFunc("/status", getStatus).Methods("GET")
+	router.HandleFunc("/cars", loadAvailableCars).Methods("PUT")
+	router.HandleFunc("/journey/", requestJourney).Methods("POST")
+	router.HandleFunc("/dropoff/", dropOff).Methods("POST")
+	router.HandleFunc("/locate/", locateCar).Methods("POST")
+
+	log.Fatal(http.ListenAndServe(":9091", router))
 
 }
