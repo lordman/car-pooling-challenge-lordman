@@ -2,20 +2,22 @@ package main
 
 import (
 	"net/http"
+	// Package validator implements value validations for structs and individual fields based on tags
+
 	// Package gorilla/mux implements a request router and dispatcher for matching incoming requests to their respective handler
 	"github.com/gorilla/mux"
 )
 
 // Car is the model for the cars
 type Car struct {
-	ID    string `json:"id"`
-	Seats int8   `json:"seats"`
+	ID    string `json:"id" validate:"required"`
+	Seats int8   `json:"seats" validate:"required,min=4,max=6"`
 }
 
 // Journey is the model for the journeys
 type Journey struct {
-	ID    string `json:"id"`
-	Seats int8   `json:"people"`
+	ID     string `json:"id" validate:"required"`
+	People int8   `json:"people" validate:"required,min=1,max=6"`
 }
 
 /*
