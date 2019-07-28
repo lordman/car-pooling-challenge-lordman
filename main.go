@@ -22,7 +22,7 @@ type Car struct {
 
 // Journey is the model for the journeys
 type Journey struct {
-	ID string `json:"id" validate:"required"`
+	ID int `json:"id" validate:"required"`
 	// People requests cars in groups of 1 to 6
 	// People in the same group want to ride on the same car
 	People   int  `json:"people" validate:"required,min=1,max=6"`
@@ -46,16 +46,15 @@ func validateCars(c []Car) error {
 	return nil
 }
 
-// This function validate if all the journey match the requirements
-// func validateJourneyCars(j Journey) error {
-// 	validate := validator.New()
-// 	err := validate.Struct(j)
-// 		if err != nil {
-// 			log.Printf("%+v", err)
-// 		}
-// 	}
-// 	return err
-// }
+// This function validate if the journey matches the requirements
+func validateJourney(j Journey) error {
+	validate := validator.New()
+	err := validate.Struct(j)
+	if err != nil {
+		log.Printf("%+v", err)
+	}
+	return err
+}
 
 /*
 This function assign unassigned groups to available cars.
@@ -98,14 +97,6 @@ func loadAvailableCars(w http.ResponseWriter, router *http.Request) {
 	decoded := json.NewDecoder(router.Body).Decode(&cars)
 	// We need to check if the data provided match the requirements
 	valid := validateCars(cars)
-	// validate := validator.New()
-	// var valid error
-	// for _, cars := range cars {
-	// 	valid = validate.Struct(cars)
-	// 	if valid != nil {
-	// 		break // At least one car has invalid data
-	// 	}
-	// }
 
 	if decoded != nil || valid != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -129,7 +120,23 @@ Responses:
 payload can't be unmarshaled.
 */
 func requestJourney(w http.ResponseWriter, router *http.Request) {
-	//TODO
+	w.Header().Set("Content Type", "application/json")
+	var newJourney Journey
+	// Decode JSON
+	decoded := json.NewDecoder(router.Body).Decode(&newJourney)
+	// We need to check if the data provided match the requirements
+	valid := validateJourney(newJourney)
+
+	if decoded != nil || valid != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		log.Println("There is a failure in the request format or the payload can't be unmarshaled")
+	} else {
+		w.WriteHeader(http.StatusAccepted)
+		journeys = append(journeys, newJourney)
+		assignJourneysToCars()
+		log.Printf("%+v", journeys)
+		log.Println("The group is registered correctly")
+	}
 }
 
 /*
@@ -172,7 +179,7 @@ func main() {
 	// Endpoints
 	router.HandleFunc("/status", getStatus).Methods("GET")
 	router.HandleFunc("/cars", loadAvailableCars).Methods("PUT")
-	router.HandleFunc("/journey/", requestJourney).Methods("POST")
+	router.HandleFunc("/journey", requestJourney).Methods("POST")
 	router.HandleFunc("/dropoff/", dropOff).Methods("POST")
 	router.HandleFunc("/locate/", locateCar).Methods("POST")
 
