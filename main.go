@@ -16,18 +16,56 @@ type Car struct {
 	ID int `json:"id" validate:"required"`
 	// Cars have a different amount of seats available,
 	// they can accommodate groups of up to 4, 5 or 6 people
-	Seats int8 `json:"seats" validate:"required,min=4,max=6"`
+	Seats  int `json:"seats" validate:"required,min=4,max=6"`
+	Groups int // Groups assigned to the car (default 0)
 }
 
 // Journey is the model for the journeys
 type Journey struct {
-	ID     string `json:"id" validate:"required"`
-	People int8   `json:"people" validate:"required,min=1,max=6"`
+	ID string `json:"id" validate:"required"`
+	// People requests cars in groups of 1 to 6
+	// People in the same group want to ride on the same car
+	People   int  `json:"people" validate:"required,min=1,max=6"`
+	Assigned bool // Default value false
 }
 
 // Since we won’t be using a database for now, we are initiating our vars as slices
 var cars []Car
 var journeys []Journey
+
+// This function validate if all the cars match the requirements
+func validateCars(c []Car) error {
+	for _, c := range c {
+		validate := validator.New()
+		err := validate.Struct(c)
+		if err != nil {
+			log.Printf("%+v", err)
+			return err
+		}
+	}
+	return nil
+}
+
+// This function validate if all the journey match the requirements
+// func validateJourneyCars(j Journey) error {
+// 	validate := validator.New()
+// 	err := validate.Struct(j)
+// 		if err != nil {
+// 			log.Printf("%+v", err)
+// 		}
+// 	}
+// 	return err
+// }
+
+/*
+This function assign unassigned groups to available cars.
+It would be triggered every time a new group request a journey
+of if a group request a drop off (a group could be waiting
+and a car could have seats available).
+*/
+func assignJourneysToCars() {
+	// TODO
+}
 
 /*
 GET /status
@@ -59,20 +97,20 @@ func loadAvailableCars(w http.ResponseWriter, router *http.Request) {
 	// Decode JSON
 	decoded := json.NewDecoder(router.Body).Decode(&cars)
 	// We need to check if the data provided match the requirements
-	validate := validator.New()
-	var valid error
-	for _, cars := range cars {
-		valid = validate.Struct(cars)
-		if valid != nil {
-			break // At least one car has invalid data
-		}
-	}
+	valid := validateCars(cars)
+	// validate := validator.New()
+	// var valid error
+	// for _, cars := range cars {
+	// 	valid = validate.Struct(cars)
+	// 	if valid != nil {
+	// 		break // At least one car has invalid data
+	// 	}
+	// }
 
 	if decoded != nil || valid != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		cars = nil
 		log.Println("There is a failure in the request format, expected headers, or the payload can't be unmarshaled")
-
 	} else {
 		w.WriteHeader(http.StatusOK)
 		log.Printf("%+v", cars)
