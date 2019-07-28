@@ -192,22 +192,22 @@ You can find more detailed information about this library on its GitHub website:
 There are several features/improvements we do not have currently implemented,
 but would be a nice-to-have:
 
-* **Database**
+* **Database**\
   Currently we use slices to store the information about the cars and the journeys.
   In order to have some persistance in the data (not limited only to the program execution life)
   we would need to use a database to recover the status in case of crashing.
-* **HTTPS**
+* **HTTPS**\
   We only provide our REST API via HTTP. This implies the traffic is sent in clear,
   which makes it susceptible to eavesdropping, man-in-the-middle attacks, and so son.
   We should also offer the service via HTTPS. Ideally, we should redirect the HTTP traffic to HTTPS.
-* **Authentication/Authorization**
+* **Authentication/Authorization**\
   We have not implemented any authentication/authorization system,
   so anyone who can reach the service would be able to use it, without any verification about if he/she has permissions to do so.
-* **Non predictable ID for Journeys**
+* **Non predictable ID for Journeys**\
   We are currently using a number to identify the journeys.
   Using a predictalbe identifier implies security risks (e.g., anyone could drop of a journey, 
   even if he/she is not the _owner_ of the journey). Having a strong authentication/authorization
   mechanism would mitigate those risks.
-* **Appropriate logging**
+* **Appropriate logging**\
   We are currently logging writing to standard error.
   We should use a better logging system.
