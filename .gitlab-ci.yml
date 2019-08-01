@@ -1,6 +1,8 @@
-services:
-  - golang:1.12
----
+default:
+  services:
+    - golang:1.12
+
+
 stages:
   - build
   - docker
