@@ -28,6 +28,7 @@ build:
     paths:
       - bin/
   script:
+    - make deps
     - make build
       #     - echo do something to build the binary or whatever
 
