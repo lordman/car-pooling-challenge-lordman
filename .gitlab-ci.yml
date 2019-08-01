@@ -21,8 +21,8 @@ build:
   stage: build
   image: # Add an image to build your service
   artifacts:
-  paths:
-    - bin/
+    paths:
+      - bin/
   script:
     - make build
       #     - echo do something to build the binary or whatever
