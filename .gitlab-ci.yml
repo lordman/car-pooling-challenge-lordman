@@ -1,7 +1,6 @@
 default:
   services:
-    - golang:1.12
-
+    - golang:1.10
 
 stages:
   - build
@@ -20,8 +19,6 @@ stages:
 #      passing acceptance.  Good luck!
 
 ## Uncomment the following sections to enable docker, image building and acceptance
-
-https://dl.google.com/go/go1.12.7.linux-amd64.tar.gz
 
 build:
   stage: build
