@@ -95,7 +95,7 @@ func assignJourneysToCars() {
 // GET /status
 // Responses:
 // 200 OK When the service is ready to receive requests.
-func getStatus(w http.ResponseWriter, router *http.Request) {
+func getStatus(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	log.Println("Indicated the service is ready to receive requests")
 }
@@ -110,27 +110,33 @@ func getStatus(w http.ResponseWriter, router *http.Request) {
 // 200 OK When the list is registered correctly.
 // 400 Bad Request When there is a failure in the request format, expected
 // headers, or the payload can't be unmarshaled.
-func loadAvailableCars(w http.ResponseWriter, router *http.Request) {
-	w.Header().Set("Content Type", "application/json")
-	// Remove all previous data (existing journeys and cars)
-	cars = nil
-	journeys = nil
-	// Decode JSON
-	decoded := json.NewDecoder(router.Body).Decode(&cars)
-	for i := 0; i < len(cars); i++ {
-		cars[i].Available = cars[i].Seats
-	}
-	// We need to check if the data provided match the requirements
-	valid := validateCars(cars)
-
-	if decoded != nil || valid != nil {
+func loadAvailableCars(w http.ResponseWriter, r *http.Request) {
+	contentType := r.Header.Get("Content-type")
+	if contentType != "application/json" {
 		w.WriteHeader(http.StatusBadRequest)
-		cars = nil
-		log.Println("There is a failure in the request format, expected headers, or the payload can't be unmarshaled")
+		log.Println("There is a failure in the expected headers")
 	} else {
-		w.WriteHeader(http.StatusOK)
-		log.Printf("%+v", cars)
-		log.Println("The list has been registered correctly")
+		// w.Header().Set("Content Type", "application/json")
+		// Remove all previous data (existing journeys and cars)
+		cars = nil
+		journeys = nil
+		// Decode JSON
+		decoded := json.NewDecoder(r.Body).Decode(&cars)
+		for i := 0; i < len(cars); i++ {
+			cars[i].Available = cars[i].Seats
+		}
+		// We need to check if the data provided match the requirements
+		valid := validateCars(cars)
+
+		if decoded != nil || valid != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			cars = nil
+			log.Println("There is a failure in the request format, expected headers, or the payload can't be unmarshaled")
+		} else {
+			w.WriteHeader(http.StatusOK)
+			log.Printf("%+v", cars)
+			log.Println("The list has been registered correctly")
+		}
 	}
 }
 
@@ -142,11 +148,11 @@ func loadAvailableCars(w http.ResponseWriter, router *http.Request) {
 // 200 OK or 202 Accepted When the group is registered correctly
 // 400 Bad Request When there is a failure in the request format or the
 // payload can't be unmarshaled.
-func requestJourney(w http.ResponseWriter, router *http.Request) {
+func requestJourney(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content Type", "application/json")
 	var newJourney Journey
 	// Decode JSON
-	decoded := json.NewDecoder(router.Body).Decode(&newJourney)
+	decoded := json.NewDecoder(r.Body).Decode(&newJourney)
 	// We need to check if the data provided match the requirements
 	valid := validateJourney(newJourney)
 	if decoded != nil || valid != nil {
@@ -169,14 +175,14 @@ func requestJourney(w http.ResponseWriter, router *http.Request) {
 // 404 Not Found When the group is not to be found.
 // 400 Bad Request When there is a failure in the request format or the
 // payload can't be unmarshaled.
-func dropOff(w http.ResponseWriter, router *http.Request) {
+func dropOff(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content Type", "application/x-www-form-urlencoded")
-	parsed := router.ParseForm()
+	parsed := r.ParseForm()
 	if parsed != nil { // The form can not be parsed
 		w.WriteHeader(http.StatusBadRequest)
 		log.Println("The form can not be parsed")
 	} else { // The form can be parsed
-		idstring := router.FormValue("ID")
+		idstring := r.FormValue("ID")
 		if idstring != "" { // The key "ID" is present in the form
 			idint, converted := strconv.Atoi(idstring)
 			if converted != nil { // The id can not be converted from string to int
@@ -236,15 +242,15 @@ func dropOff(w http.ResponseWriter, router *http.Request) {
 // 404 Not Found When the group is not to be found.
 // 400 Bad Request When there is a failure in the request format or the
 // payload can't be unmarshaled.
-func locateCar(w http.ResponseWriter, router *http.Request) {
+func locateCar(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content Type", "application/x-www-form-urlencoded")
 	w.Header().Set("Accept", "application/json")
-	parsed := router.ParseForm()
+	parsed := r.ParseForm()
 	if parsed != nil { // The form can not be parsed
 		w.WriteHeader(http.StatusBadRequest)
 		log.Println("The form can not be parsed")
 	} else { // The form can be parsed
-		idstring := router.FormValue("ID")
+		idstring := r.FormValue("ID")
 		if idstring != "" { // The key "ID" is present in the form
 			idint, converted := strconv.Atoi(idstring)
 			if converted != nil { // The id can not be converted from string to int
