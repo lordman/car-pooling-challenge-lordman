@@ -1,4 +1,5 @@
-services: golang:1.12
+services:
+  - golang:1.12
 ---
 stages:
   - build
