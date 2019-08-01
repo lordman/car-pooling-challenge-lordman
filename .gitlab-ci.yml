@@ -1,5 +1,5 @@
 # default:
-image: golang:1.10
+# image: 
   # services:
   #   - golang:1.10
 
@@ -23,29 +23,28 @@ stages:
 
 build:
   stage: build
-  image: # Add an image to build your service
+  image: golang:1.10
   artifacts:
     paths:
       - bin/
   script:
     - make deps
     - make build
-      #     - echo do something to build the binary or whatever
 
-# build_image:
-#   stage: docker
-#   image: docker:latest
-#   variables:
-#     DOCKER_HOST: tcp://docker:2375/
-#     DOCKER_DRIVER: overlay2
-#   services:
-#     - docker:dind
-#   script:
-#     - echo As a helper here you have a sample of how to build and push a \
-#     docker image to the provided gitlab registry.
-#     - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u ${CI_REGISTRY_USER} ${CI_REGISTRY}
-#     - docker build . -t ${CI_REGISTRY_IMAGE}:latest
-#     - docker push ${CI_REGISTRY_IMAGE}:latest
+build_image:
+  stage: docker
+  image: docker:latest
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  script:
+    - echo As a helper here you have a sample of how to build and push a \
+    docker image to the provided gitlab registry.
+    - echo ${CI_JOB_TOKEN} | docker login --password-stdin -u ${CI_REGISTRY_USER} ${CI_REGISTRY}
+    - docker build . -t ${CI_REGISTRY_IMAGE}:latest
+    - docker push ${CI_REGISTRY_IMAGE}:latest
 
 ## Uncomment the acceptance step and do not remove, this step is required for us
 ## to accept your submission!
