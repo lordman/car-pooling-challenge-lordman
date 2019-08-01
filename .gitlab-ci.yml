@@ -24,6 +24,7 @@ build:
     paths:
       - bin/
   script:
+    - apk add --no-cache go
     - make build
       #     - echo do something to build the binary or whatever
 
