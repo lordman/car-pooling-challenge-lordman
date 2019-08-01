@@ -35,29 +35,29 @@ endif
 # Targets
 #
 .PHONY: all
-all: test build
+all: test build	### Execute the tests and build the app binary
 
 .PHONY: build
-build:
+build:	### Build the app binary
 	$(GOBUILD) -o $(BINARY_NAME) -v
 
 .PHONY: test
-test:
+test:	### Execute the tests (not implemented yet)
 	$(GOTEST) -v ./...
 
 .PHONY: clean
-clean:
+clean:	### Remove files
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 	rm -f $(BINARY_UNIX)
 
 .PHONY: run
-run:
+run:	### Build and run the app
 	$(GOBUILD) -o $(BINARY_NAME) -v ./...
 	./$(BINARY_NAME)
 
 .PHONY: deps
-deps:
+deps:	### Download and install packages and dependencies
 	$(GOGET) gopkg.in/go-playground/validator.v9
 	$(GOGET) github.com/gorilla/mux
 	
@@ -66,5 +66,5 @@ debug:	### Debug Makefile itself
 	@echo $(UNAME)
 
 .PHONY: dockerize
-dockerize: build
+dockerize: build	### Build Docker image
 	@docker build -t car-pooling-challenge:latest .
