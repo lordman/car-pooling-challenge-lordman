@@ -24,8 +24,9 @@ stages:
 build:
   stage: build
   image: golang:1.10
-  # artifacts:
-  #   paths:
+  artifacts:
+    paths:
+      - car-pooling-challenge
   #     - bin/
   script:
     - make deps
