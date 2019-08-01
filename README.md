@@ -184,8 +184,7 @@ would be beyond the scope of this challenge. To reinforce this statement about p
 serve this benchmark in which it is compared with other extended languages for programming
 web servers as a reference:
 
-[Server-side I/O Performance: Node vs. PHP vs. Java vs. Go]
-(https://www.toptal.com/back-end/server-side-io-performance-node-php-java-go)
+[Server-side I/O Performance: Node vs. PHP vs. Java vs. Go](https://www.toptal.com/back-end/server-side-io-performance-node-php-java-go)
 
 These are the three factors that have made us opt for using Go. We could do a more detailed
 analysis, but that would be out of the scope of this challenge.
