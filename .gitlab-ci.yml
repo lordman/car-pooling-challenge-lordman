@@ -1,4 +1,5 @@
 default:
+  image: ruby:2.2
   services:
     - golang:1.10
 
