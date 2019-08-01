@@ -27,10 +27,6 @@ build:
     paths:
       - bin/
   script:
-    - 
-    - apt install golang-go
-    # - go build -o car-pooling-challenge -v
-    # - apk add --no-cache go
     - make build
       #     - echo do something to build the binary or whatever
 
