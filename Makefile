@@ -11,7 +11,7 @@ GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 
 # Binary names
-BINARY_NAME=car-pooling-challenge-lordman
+BINARY_NAME=car-pooling-challenge
 BINARY_UNIX=$(BINARY_NAME)_unix
 
 # Variables
