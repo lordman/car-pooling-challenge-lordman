@@ -30,6 +30,8 @@ build:
   script:
     - make deps
     - make build
+    - ls -la
+    - pwd
 
 build_image:
   stage: docker
