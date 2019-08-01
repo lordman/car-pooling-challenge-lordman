@@ -1,5 +1,5 @@
 # default:
-  image: golang:1.10
+image: golang:1.10
   # services:
   #   - golang:1.10
 
