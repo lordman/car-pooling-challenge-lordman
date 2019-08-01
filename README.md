@@ -154,6 +154,42 @@ README adding sections to it, the same way you would be generating
 documentation for any other deliverable. We want to see how you operate in a
 quasi real work environment.
 
+## Language choice
+
+We have chosen Go as the programming language to perform this challenge. We have
+chosen Go instead of another languajes like Python or Java for several reasons.
+
+First and foremost, Go uses static linking it actually combining all dependency
+libraries and modules into one single binary file based on OS type and architecture.
+This means once the backend application is compiled, it is possible to just upload
+compiled binary into server and it will work, without installing any dependencies there.
+
+Note this is specially important in our case, because we are deploying our app in a
+Docker container: if we had chosen another languages like, e.g., Python or Java,
+we would had needed to install in our container the Python interpreter or the Java
+runtime environment, respectively. That would imply adding complexity to our deployment
+and also a worse use of our resources.
+
+Besides, Go is a statically typed language. A statically typed language is one where
+variable types are declared explicitly for the compiler so even trivial bugs are caught
+really easily while in a dynamically typed language type inference is implemented by the
+interpreter hence some bugs may remain, due to the interpreter interpreting something
+incorrectly. Using a statically typed language eliminates these interpretation issues.
+
+The third factor we have considered to choose Go is performance. Go is really fast and
+generally its performance is similar to that of Java or C++. Of course, this would
+depend on the specific application, the load, and so on. We would need to perform some
+benchmarks in order to guarantee Go will perform better that other languages, but this
+would be beyond the scope of this challenge. To reinforce this statement about performance,
+serve this benchmark in which it is compared with other extended languages for programming
+web servers as a reference:
+
+[Server-side I/O Performance: Node vs. PHP vs. Java vs. Go]
+(https://www.toptal.com/back-end/server-side-io-performance-node-php-java-go)
+
+These are the three factors that have made us opt for using Go. We could do a more detailed
+analysis, but that would be out of the scope of this challenge.
+
 ## Third party libraries
 
 ### Gorilla/Mux
