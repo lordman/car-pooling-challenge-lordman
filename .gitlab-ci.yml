@@ -1,3 +1,4 @@
+services: golang:1.12
 ---
 stages:
   - build
@@ -17,6 +18,8 @@ stages:
 
 ## Uncomment the following sections to enable docker, image building and acceptance
 
+https://dl.google.com/go/go1.12.7.linux-amd64.tar.gz
+
 build:
   stage: build
   image: # Add an image to build your service
@@ -24,6 +27,7 @@ build:
     paths:
       - bin/
   script:
+    - 
     - apt install golang-go
     # - go build -o car-pooling-challenge -v
     # - apk add --no-cache go
