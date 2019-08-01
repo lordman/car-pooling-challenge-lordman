@@ -4,27 +4,28 @@ stages:
   - docker
   - acceptance
 
-remove_me:
-  stage: build
-  script:
-  - >
-     echo If you can see this you know that gitlab-ci is running.  You should
-     uncomment the sections that enable building the docker image and running
-     the accepance tests.
-     Change any file as necessary to make tests pass in your language of
-     choice.  But be mindful that we will only accept challenges that are
-     passing acceptance.  Good luck!
+# remove_me:
+#   stage: build
+#   script:
+#   - >
+#      echo If you can see this you know that gitlab-ci is running.  You should
+#      uncomment the sections that enable building the docker image and running
+#      the accepance tests.
+#      Change any file as necessary to make tests pass in your language of
+#      choice.  But be mindful that we will only accept challenges that are
+#      passing acceptance.  Good luck!
 
 ## Uncomment the following sections to enable docker, image building and acceptance
 
-# build:
-#   stage: build
-#   image: # Add an image to build your service
-#   artifacts:
-#   paths:
-#     - bin/
-#   script:
+build:
+  stage: build
+  image: # Add an image to build your service
+  artifacts:
+  paths:
+    - bin/
+  script:
 #     - echo do something to build the binary or whatever
+      - make build
 
 # build_image:
 #   stage: docker
