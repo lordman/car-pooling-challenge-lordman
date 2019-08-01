@@ -24,9 +24,9 @@ stages:
 build:
   stage: build
   image: golang:1.10
-  artifacts:
-    paths:
-      - bin/
+  # artifacts:
+  #   paths:
+  #     - bin/
   script:
     - make deps
     - make build
