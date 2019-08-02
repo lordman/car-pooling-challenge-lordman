@@ -225,26 +225,45 @@ You can find more detailed information about this library on its GitHub website:
 ## To-do list
 
 There are several features/improvements we do not have currently implemented,
-but would be a nice-to-have:
+but would be a nice-to-have. In fact, they would be a must if this were going
+to be released in production:
 
+* **Automated unit testing**\
+  We have manually tested all the considered use cases and also have trusted in
+  the acceptance tests to verify everything works as intended. Nevertheless,
+  it is a good practice to write and run automated unit tests to ensure that
+  every _unit_ meets its design and behaves as intended. This would allow us
+  to catch bugs very early on in the development cycle and minimize the cost
+  of fixing them. Those tests should be verified before committing the code,
+  being complementary to any integration and acceptance testing.
 * **Database**\
   Currently we use slices to store the information about the cars and the journeys.
-  In order to have some persistance in the data (not limited only to the program execution life)
-  we would need to use a database to recover the status in case of crashing.
+  In order to have some persistance in the data (not limited only to the program
+  execution life) we would need to use a database to recover the status in case
+  of crashing.
 * **HTTPS**\
   We only provide our REST API via HTTP. This implies the traffic is sent in clear,
   which makes it susceptible to eavesdropping, man-in-the-middle attacks, and so son.
-  We should also offer the service via HTTPS. Ideally, we should redirect the HTTP traffic to HTTPS.
+  We should also offer the service via HTTPS. Ideally, we should redirect
+  the HTTP traffic to HTTPS.
 * **Authentication/Authorization**\
   We have not implemented any authentication/authorization system,
-  so anyone who can reach the service would be able to use it, without any verification about if he/she has permissions to do so.
+  so anyone who can reach the service would be able to use it, without any verification
+  about if he/she has permissions to do so.
 * **Non predictable ID for Journeys**\
-  We are currently using a number to identify the journeys. In fact, we have asumed they arrive
-  ordered by id (note the use of ```sort.Search``` to find a specific journey).
+  We are currently using a number to identify the journeys. In fact, we have asumed
+  they arrive ordered by id (note the use of ```sort.Search``` to find a specific journey).
   Using a predictalbe identifier implies security risks (e.g., anyone could drop of a journey, 
-  even if he/she is not the _owner_ of the journey). Having a strong authentication/authorization
-  mechanism would mitigate those risks.
-  On the oher hand, using a non predictable identifier could have some performance implications.
+  even if he/she is not the _owner_ of the journey). Having a strong
+  authentication/authorization mechanism would mitigate those risks. On the oher hand,
+  using a non predictable identifier could have some performance implications.
 * **Appropriate logging**\
   We are currently logging writing to standard error.
   We should use a better logging system.
+* **Audit third party libraries**\
+  Trusting a third party library based only on its reputation (as we have done
+  in this challenge) implies inherently assuming security risks. Also, choosing
+  a specific library could lead to performance issues if we want to scale.
+  Before proceeding with any final implementation work, we should carry out
+  an audit of these libraries to discover potential problems.
+  
