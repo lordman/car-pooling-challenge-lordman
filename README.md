@@ -156,37 +156,37 @@ quasi real work environment.
 
 ## Language choice
 
-We have chosen Go as the programming language to perform this challenge. We have
-chosen Go instead of another languajes like Python or Java for several reasons.
+I have chosen Go as the programming language to perform this challenge. I have opted in for
+Go instead of other languages like Java, PHP or Python for several reasons.
 
 First and foremost, Go uses static linking combining all dependency libraries
 and modules into one single binary file based on OS type and architecture.
 This means once the backend application is compiled, it is possible to just upload
 compiled binary into server and it will work, without installing any dependencies there.
 
-Note this is specially important in our case, because we are deploying our app in a
-Docker container: if we had chosen another languages like, e.g., Python or Java,
-we would had needed to install in our container the Python interpreter or the Java
-runtime environment, respectively. That would imply adding complexity to our deployment
-and also a worse use of our resources.
+Note this lack of dependencies is specially important in this challenge, because the app
+is going to be deployed in a Docker container: if I have chosen another language like, e.g.,
+Python, PHP or Java, I would had needed to install in the container the Python or PHP interpreters
+or the Java runtime environment, respectively. That would imply adding complexity to the deployment
+and also a worse use of the resources.
 
 Besides, Go is a statically typed language. A statically typed language is one where
 variable types are declared explicitly for the compiler so even trivial bugs are caught
-really easily, while in a dynamically typed language type inference is implemented by the
-interpreter. Hence, some bugs may remain, due to the interpreter interpreting something
+really easily, while in a dynamically typed language type inference is implemented by
+the interpreter. Hence, some bugs may remain, due to the interpreter interpreting something
 incorrectly. Using a statically typed language eliminates these interpretation issues.
 
-The third factor we have considered to choose Go is performance. Go is really fast and
-generally its performance is similar to that of Java or C++. Of course, this would
-depend on the specific application, the load, and so on. We would need to perform some
-benchmarks in order to guarantee Go will perform better that other languages, but this
-would be beyond the scope of this challenge. To reinforce this statement about performance,
+The third factor considered to choose Go is performance. Go is really fast and generally
+its performance is similar to that of Java or C++. Of course, this would depend on
+the specific application, the load, and so on. I would need to perform some benchmarks
+in order to guarantee Go will perform better that other languages, but this would be
+beyond the scope of this challenge. To reinforce this statement about performance,
 serve this benchmark in which it is compared with other extended languages for programming
 web servers as a reference:
 
 [Server-side I/O Performance: Node vs. PHP vs. Java vs. Go](https://www.toptal.com/back-end/server-side-io-performance-node-php-java-go)
 
-These are the three factors that have made us opt for using Go. We could do a more detailed
+These are the three factors that have made me opt for using Go. I could do a more detailed
 analysis, but that would be out of the scope of this challenge.
 
 ## Third party libraries
@@ -199,23 +199,25 @@ The name mux stands for "HTTP request multiplexer". Like the standard ```http.Se
 ```mux.Router``` matches incoming requests against a list of registered routes
 and calls a handler for the route that matches the URL or other conditions.
 
-We use _gorilla/mux_ because that's what we saw being used in several places. It's very capable and
-makes it easier to specify which methods should be allowed for specific routes. A good thing about
-_gorilla/mux_ is that it's compatible with the built-in ```http.Handler``` API.
+I used _gorilla/mux_ because that's what I have seen being used in several places.
+It's very capable and makes it easier to specify which methods should be allowed
+for specific routes. A good thing about _gorilla/mux_ is that it's compatible with
+the built-in ```http.Handler``` API.
 
-You can find more detailed information about this library on its GitHub website:
+More detailed information about this library can be found on its GitHub website:
 
 [https://github.com/gorilla/mux]
 
 ### Go Playground Validator
 
-Go Playground Validator implements value validations for structs and individual fields based on tags.
+Go Playground Validator implements value validations for structs and individual fields
+based on tags.
 
 Input validation prevents improperly formed data from entering an information system.
 Because it is difficult to detect a malicious user who is trying to attack software,
 applications should check and validate all input entered into a system.
 
-We use Go Playground Validator because it is, as far as we know, the most famous
+I used Go Playground Validator because it is, as far as I know, the most famous
 and has the most stars on GitHub among the existing libraries.
 
 You can find more detailed information about this library on its GitHub website:
@@ -224,45 +226,45 @@ You can find more detailed information about this library on its GitHub website:
 
 ## To-do list
 
-There are several features/improvements we do not have currently implemented,
+There are several features/improvements I do not have currently implemented,
 but would be a nice-to-have. In fact, they would be a must if this were going
 to be released in production:
 
 * **Automated unit testing**\
-  We have manually tested all the considered use cases and also have trusted in
+  I have manually tested all the considered use cases and also have trusted in
   the acceptance tests to verify everything works as intended. Nevertheless,
   it is a good practice to write and run automated unit tests to ensure that
-  every _unit_ meets its design and behaves as intended. This would allow us
+  every _unit_ meets its design and behaves as intended. This would allow
   to catch bugs very early on in the development cycle and minimize the cost
   of fixing them. Those tests should be verified before committing the code,
   being complementary to any integration and acceptance testing.
 * **Database**\
-  Currently we use slices to store the information about the cars and the journeys.
-  In order to have some persistance in the data (not limited only to the program
-  execution life) we would need to use a database to recover the status in case
+  Currently I have used slices to store the information about the cars and the journeys.
+  In order to have some persistence in the data (not limited only to the program
+  execution life) I would need to use a database to recover the status in case
   of crashing.
 * **HTTPS**\
-  We only provide our REST API via HTTP. This implies the traffic is sent in clear,
+  The REST API is only provided via HTTP. This implies the traffic is sent in clear,
   which makes it susceptible to eavesdropping, man-in-the-middle attacks, and so son.
-  We should also offer the service via HTTPS. Ideally, we should redirect
-  the HTTP traffic to HTTPS.
+  The service should also be offered via HTTPS (two open ports should be needed).
+  Ideally, HTTP traffic should be redirected to HTTPS.
 * **Authentication/Authorization**\
-  We have not implemented any authentication/authorization system,
-  so anyone who can reach the service would be able to use it, without any verification
-  about if he/she has permissions to do so.
+  No authentication/authorization system has been implemented, so anyone who can reach
+  the service would be able to use it, without any verification about if he/she has
+  permissions to do so.
 * **Non predictable ID for Journeys**\
-  We are currently using a number to identify the journeys. In fact, we have asumed
+  We are currently using a number to identify the journeys. In fact, I have assumed
   they arrive ordered by id (note the use of ```sort.Search``` to find a specific journey).
-  Using a predictalbe identifier implies security risks (e.g., anyone could drop of a journey, 
+  Using a predictable identifier implies security risks (e.g., anyone could drop of a journey, 
   even if he/she is not the _owner_ of the journey). Having a strong
-  authentication/authorization mechanism would mitigate those risks. On the oher hand,
+  authentication/authorization mechanism would mitigate those risks. On the other hand,
   using a non predictable identifier could have some performance implications.
 * **Appropriate logging**\
-  We are currently logging writing to standard error.
-  We should use a better logging system.
+  The application is currently logging writing to standard error. A better logging system
+  should be used.
 * **Audit third party libraries**\
-  Trusting a third party library based only on its reputation (as we have done
+  Trusting a third party library based only on its reputation (as I have done
   in this challenge) implies inherently assuming security risks. Also, choosing
   a specific library could lead to performance issues if we want to scale.
-  Before proceeding with any final implementation work, we should carry out
-  an audit of these libraries to discover potential problems.
+  Before proceeding with any final implementation work, an audit of these libraries
+  to discover potential problems should carried out.
