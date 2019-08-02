@@ -159,8 +159,8 @@ quasi real work environment.
 We have chosen Go as the programming language to perform this challenge. We have
 chosen Go instead of another languajes like Python or Java for several reasons.
 
-First and foremost, Go uses static linking it actually combining all dependency
-libraries and modules into one single binary file based on OS type and architecture.
+First and foremost, Go uses static linking combining all dependency libraries
+and modules into one single binary file based on OS type and architecture.
 This means once the backend application is compiled, it is possible to just upload
 compiled binary into server and it will work, without installing any dependencies there.
 
@@ -172,8 +172,8 @@ and also a worse use of our resources.
 
 Besides, Go is a statically typed language. A statically typed language is one where
 variable types are declared explicitly for the compiler so even trivial bugs are caught
-really easily while in a dynamically typed language type inference is implemented by the
-interpreter hence some bugs may remain, due to the interpreter interpreting something
+really easily, while in a dynamically typed language type inference is implemented by the
+interpreter. Hence, some bugs may remain, due to the interpreter interpreting something
 incorrectly. Using a statically typed language eliminates these interpretation issues.
 
 The third factor we have considered to choose Go is performance. Go is really fast and
@@ -266,4 +266,3 @@ to be released in production:
   a specific library could lead to performance issues if we want to scale.
   Before proceeding with any final implementation work, we should carry out
   an audit of these libraries to discover potential problems.
-  
